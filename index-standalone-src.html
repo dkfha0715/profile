@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>강아롬 · Digital & AI Instructor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --bg: #f7f3eb;
+    --bg-card: #ffffff;
+    --bg-dark: #1a1814;
+    --ink: #1a1814;
+    --ink-soft: #4a4640;
+    --ink-mute: #8a8478;
+    --line: #e6dfd1;
+    --accent: #b88a3e;
+    --accent-soft: #d9bf8f;
+    --accent-bg: #efe5d0;
+    --font-serif: 'Noto Serif KR', 'Cormorant Garamond', serif;
+    --font-display: 'Cormorant Garamond', 'Noto Serif KR', serif;
+    --font-sans: 'Noto Sans KR', 'Inter', system-ui, sans-serif;
+    --font-mono: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* ===== Top Nav ===== */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 22px 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(247, 243, 235, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  .nav.scrolled { border-bottom-color: var(--line); }
+  .nav-brand {
+    font-family: var(--font-display);
+    font-size: 20px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .nav-brand .dot { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::before {
+    content: attr(data-num);
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-style: italic;
+    margin-right: 6px;
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ===== Hero ===== */
+  .hero {
+    min-height: 100vh;
+    padding: 140px 56px 80px;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 72px;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .hero-meta .line { width: 36px; height: 1px; background: var(--accent); }
+
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(72px, 10vw, 132px);
+    font-weight: 300;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .hero h1 .first {
+    display: block;
+  }
+  .hero h1 .second {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 300;
+    font-size: 0.62em;
+    margin-top: 8px;
+    letter-spacing: 0.02em;
+  }
+  .hero-role {
+    font-size: 18px;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin-bottom: 44px;
+    max-width: 520px;
+    line-height: 1.65;
+  }
+  .hero-role strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 56px;
+  }
+  .hero-tag {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .hero-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 56px;
+    padding-top: 36px;
+    border-top: 1px solid var(--line);
+    max-width: 560px;
+  }
+  .hero-stat .num {
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .hero-stat .num sup {
+    font-size: 16px;
+    color: var(--accent);
+    font-style: italic;
+  }
+  .hero-stat .label {
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* Hero Image */
+  .hero-portrait {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/5;
+    max-width: 520px;
+    justify-self: end;
+  }
+  .hero-portrait::before {
+    content: "";
+    position: absolute;
+    inset: -20px -20px 40px 40px;
+    background: var(--accent-bg);
+    z-index: 0;
+  }
+  .hero-portrait img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    z-index: 1;
+    filter: grayscale(0.05) contrast(1.02);
+  }
+  .hero-portrait-caption {
+    position: absolute;
+    bottom: -28px;
+    right: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+    z-index: 2;
+  }
+  .hero-portrait-tag {
+    position: absolute;
+    top: 28px;
+    left: -32px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  /* Section base */
+  section.block {
+    padding: 140px 56px;
+    position: relative;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 72px;
+    margin-bottom: 80px;
+    align-items: end;
+  }
+  .section-label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .section-label .num {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--accent);
+    font-size: 15px;
+    letter-spacing: 0.1em;
+  }
+  .section-label .name {
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(40px, 4.4vw, 64px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .section-title em {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 300;
+  }
+
+  /* ===== About ===== */
+  .about {
+    background: var(--bg);
+  }
+  .about-body {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 72px;
+  }
+  .about-aside {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    border-left: 1px solid var(--accent);
+    padding-left: 24px;
+  }
+  .about-text p {
+    font-size: 17px;
+    color: var(--ink-soft);
+    line-height: 1.85;
+    margin-bottom: 22px;
+    text-wrap: pretty;
+  }
+  .about-text p:last-child { margin-bottom: 0; }
+  .about-text strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .about-sign {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .about-sign-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 28px;
+    color: var(--ink);
+  }
+  .about-sign-role {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+  }
+
+  /* ===== Expertise ===== */
+  .expertise { background: var(--bg-dark); color: #f2ece0; }
+  .expertise .section-label .name { color: #9a9080; }
+  .expertise .section-title { color: #f2ece0; }
+  .expertise .section-title em { color: var(--accent-soft); }
+
+  .exp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .exp-card {
+    background: var(--bg-dark);
+    padding: 48px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: 340px;
+    transition: background 0.3s;
+  }
+  .exp-card:hover { background: #221f1a; }
+  .exp-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent-soft);
+    letter-spacing: 0.1em;
+  }
+  .exp-title {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.25;
+    color: #f8f3e8;
+    margin-top: auto;
+  }
+  .exp-en {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--accent-soft);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    margin-top: -16px;
+  }
+  .exp-desc {
+    font-size: 13.5px;
+    color: #b8b0a0;
+    line-height: 1.7;
+    margin-top: 4px;
+  }
+  .exp-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .exp-keys span {
+    font-size: 10.5px;
+    padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #cdc4b1;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+  }
+
+  /* ===== Career ===== */
+  .career { background: var(--bg); }
+  .career-list {
+    border-top: 1px solid var(--line);
+  }
+  .career-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 180px 110px;
+    gap: 32px;
+    align-items: baseline;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+    transition: padding 0.3s;
+    position: relative;
+  }
+  .career-row::before {
+    content: "";
+    position: absolute;
+    left: -56px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s;
+  }
+  .career-row:hover { padding-left: 12px; }
+  .career-row:hover::before { transform: scaleY(1); }
+  .career-period {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+  .career-org {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .career-task {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .career-role {
+    justify-self: end;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .career-row.active .career-role {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .career-row.active .career-role::before {
+    content: "●";
+    margin-right: 6px;
+    color: var(--accent);
+    font-size: 8px;
+    vertical-align: middle;
+  }
+
+  /* ===== Certs ===== */
+  .certs { background: #f1ebde; }
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .cert-card {
+    background: var(--bg-card);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 200px;
+    transition: background 0.2s;
+    position: relative;
+  }
+  .cert-card:hover { background: #fefcf8; }
+  .cert-card.featured {
+    background: var(--bg-dark);
+    color: #f2ece0;
+  }
+  .cert-card.featured .cert-year,
+  .cert-card.featured .cert-issuer { color: var(--accent-soft); }
+  .cert-card.featured .cert-name { color: #f8f3e8; }
+  .cert-year {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+  }
+  .cert-name {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-top: auto;
+  }
+  .cert-issuer {
+    font-size: 12px;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+  .cert-star {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  /* ===== Contact ===== */
+  .contact {
+    background: var(--bg-dark);
+    color: #f2ece0;
+    padding: 120px 56px 56px;
+  }
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 72px;
+    align-items: end;
+    padding-bottom: 80px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .contact-title {
+    font-family: var(--font-serif);
+    font-size: clamp(48px, 6vw, 96px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .contact-title em {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--accent-soft);
+    font-weight: 300;
+  }
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .contact-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .contact-row .key {
+    font-size: 10.5px;
+    letter-spacing: 0.3em;
+    color: #9a9080;
+    text-transform: uppercase;
+  }
+  .contact-row .val {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    color: #f2ece0;
+  }
+  .contact-row .val.email {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--accent-soft);
+  }
+
+  .footer-bottom {
+    padding-top: 36px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: #6a6357;
+    text-transform: uppercase;
+  }
+
+  /* Floating side label */
+  .side-label {
+    position: fixed;
+    left: 18px;
+    bottom: 36px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    z-index: 40;
+    transition: color 0.3s;
+  }
+  .side-label.dark { color: #6a6357; }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .hero { grid-template-columns: 1fr; padding-top: 120px; }
+    .hero-portrait { max-width: 380px; justify-self: start; margin-top: 40px; }
+    .nav-links { display: none; }
+    .section-head, .about-body, .contact-inner { grid-template-columns: 1fr; gap: 32px; }
+    .exp-grid { grid-template-columns: repeat(2, 1fr); }
+    .certs-grid { grid-template-columns: repeat(2, 1fr); }
+    .career-row { grid-template-columns: 1fr; gap: 6px; padding: 24px 0; }
+    .career-role { justify-self: start; }
+    section.block, .contact { padding-left: 28px; padding-right: 28px; }
+    .nav { padding: 18px 28px; }
+    .side-label { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail" data-bg-color="#f7f3eb">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#f7f3eb"/>
+    <g transform="translate(600 400)">
+      <circle r="180" fill="none" stroke="#b88a3e" stroke-width="2"/>
+      <text x="0" y="-20" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="64" fill="#1a1814">Arom</text>
+      <text x="0" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#b88a3e" letter-spacing="6">PORTFOLIO</text>
+      <line x1="-60" y1="70" x2="60" y2="70" stroke="#b88a3e" stroke-width="1"/>
+    </g>
+  </svg>
+</template>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-brand">Arom Kang<span class="dot">.</span></div>
+    <ul class="nav-links">
+      <li><a data-num="01" href="#about">About</a></li>
+      <li><a data-num="02" href="#expertise">Expertise</a></li>
+      <li><a data-num="03" href="#career">Career</a></li>
+      <li><a data-num="04" href="#certs">Credentials</a></li>
+      <li><a data-num="05" href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="side-label" id="sideLabel">Jeju · Digital Educator · 2026</div>
+
+  <!-- HERO -->
+  <header class="hero" data-screen-label="01 Hero">
+    <div class="hero-text">
+      <div class="hero-meta">
+        <span class="line"></span>
+        <span>Portfolio · Volume 01</span>
+      </div>
+      <h1>
+        <span class="first">강아롬</span>
+        <span class="second">Educator of the digital age.</span>
+      </h1>
+      <p class="hero-role">
+        제주에서 활동하는 <strong>생성형 AI · 디지털 · 코딩 · 진로 교육 강사</strong>입니다.<br>
+        배움이 단지 기술의 습득이 아니라, 더 넓은 가능성으로 향하는 길이 되도록
+        학생과 시민, 그리고 교사를 만납니다.
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag">생성형 AI</span>
+        <span class="hero-tag">디지털 리터러시</span>
+        <span class="hero-tag">블록·VR 코딩</span>
+        <span class="hero-tag">진로 교육</span>
+        <span class="hero-tag">늘봄 · 디지털새싹</span>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num">8<sup>+</sup></div>
+          <div class="label">Years in Education</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">12<sup>°</sup></div>
+          <div class="label">Certifications</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">300<sup>h</sup></div>
+          <div class="label">Digital Tutor Training</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-portrait">
+      <span class="hero-portrait-tag">Kang A-rom · 2026</span>
+      <img src="assets/profile.png" alt="강아롬 강사 프로필 사진" />
+      <span class="hero-portrait-caption">— teaching since 2017</span>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section class="block about" id="about" data-screen-label="02 About">
+    <div class="section-head">
+      <div class="section-label">
+        <span class="num">— 01</span>
+        <span class="name">About</span>
+      </div>
+      <h2 class="section-title">
+        기술과 사람 사이,<br>
+        <em>연결하는 사람</em>이 되고 싶습니다.
+      </h2>
+    </div>
+
+    <div class="about-body">
+      <aside class="about-aside">
+        “가르치는 일은 결국,<br>
+        한 사람의 가능성에<br>
+        손을 내미는 일이라고<br>
+        믿습니다.”
+      </aside>
+      <div class="about-text">
+        <p>
+          저는 제주에서 활동하는 디지털 교육 강사 <strong>강아롬</strong>입니다.
+          초등학교 돌봄교사로 교육 현장에 첫발을 디딘 이후, 기초학력 협력강사와
+          디지털튜터 전문가 과정을 거치며 “모두를 위한 디지털 배움”이라는 주제에
+          오래 머물러 왔습니다.
+        </p>
+        <p>
+          빠르게 변하는 기술의 흐름 속에서, 저는 학습자가 변화의 객체가 아니라
+          <strong>변화의 주체</strong>가 되도록 돕는 데 관심이 있습니다.
+          생성형 AI, 코파일럿, 블록·VR 코딩, 메타버스, 3D 프린팅펜까지 ―
+          도구는 달라져도 교육의 본질은 사람을 향한다고 믿습니다.
+        </p>
+        <p>
+          KTcs 디지털배움터, 한국표준협회, 에듀인플랫폼, 디지털새싹 캠프 등
+          공공·민간 영역을 넘나들며 어린이부터 시니어까지 다양한 학습자를 만나고
+          있으며, <strong>Google 공인 교육 전문가 Lv.1·2</strong>, <strong>AICE FUTURE 1급</strong> 등
+          전문성을 꾸준히 갱신해 가고 있습니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-sign">
+      <div class="about-sign-name">Arom.</div>
+      <div class="about-sign-role">Digital · AI Instructor / Jeju</div>
+    </div>
+  </section>
+
+  <!-- EXPERTISE -->
+  <section class="block expertise" id="expertise" data-screen-label="03 Expertise">
+    <div class="section-head">
+      <div class="section-label">
+        <span class="num">— 02</span>
+        <span class="name">Expertise</span>
+      </div>
+      <h2 class="section-title">
+        네 가지 영역으로<br>
+        <em>가르치고, 배우며, 안내</em>합니다.
+      </h2>
+    </div>
+
+    <div class="exp-grid">
+      <div class="exp-card">
+        <div class="exp-num">i.</div>
+        <div class="exp-desc">
+          ChatGPT · Copilot · Gemini 등 생성형 AI를 일상과 업무, 교육에 활용하는 법을 안내합니다.
+          한국표준협회 강의 보조 및 공공 교육에서 검증된 커리큘럼을 운영합니다.
+        </div>
+        <div class="exp-keys">
+          <span>ChatGPT</span><span>Copilot</span><span>Gemini</span><span>프롬프트</span>
+        </div>
+        <h3 class="exp-title">생성형 AI<br>활용 교육</h3>
+        <div class="exp-en">Generative AI Literacy</div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-num">ii.</div>
+        <div class="exp-desc">
+          KTcs 디지털배움터 강사로서 키오스크, 모바일, 스마트워크 등 시민을 위한 디지털 역량을
+          쉽고 친절하게 전달합니다. 세대 간 디지털 격차를 좁히는 일에 집중합니다.
+        </div>
+        <div class="exp-keys">
+          <span>키오스크</span><span>스마트폰</span><span>Canva</span><span>구글 도구</span>
+        </div>
+        <h3 class="exp-title">디지털 역량<br>강화 교육</h3>
+        <div class="exp-en">Digital Literacy</div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-num">iii.</div>
+        <div class="exp-desc">
+          스크래치 · 엔트리 블록코딩부터 VR·메타버스, 3D 프린팅펜까지.
+          디지털새싹 K-SW 안전탐험캠프 강사로 SW·AI 교육 현장에서 활동합니다.
+        </div>
+        <div class="exp-keys">
+          <span>Scratch</span><span>Entry</span><span>VR</span><span>3D Pen</span>
+        </div>
+        <h3 class="exp-title">코딩 · SW<br>창의 교육</h3>
+        <div class="exp-en">Creative Coding</div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-num">iv.</div>
+        <div class="exp-desc">
+          에듀인플랫폼 진로 강사, 늘봄학교 강사 연수 이수자로서
+          학생의 흥미와 가능성을 디지털 시대의 직업 세계와 연결합니다.
+          탐색 → 체험 → 설계의 3단계로 진행합니다.
+        </div>
+        <div class="exp-keys">
+          <span>늘봄</span><span>진로 탐색</span><span>직업 체험</span><span>미래 역량</span>
+        </div>
+        <h3 class="exp-title">진로 교육 ·<br>늘봄 프로그램</h3>
+        <div class="exp-en">Career &amp; Future Skills</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAREER -->
+  <section class="block career" id="career" data-screen-label="04 Career">
+    <div class="section-head">
+      <div class="section-label">
+        <span class="num">— 03</span>
+        <span class="name">Career</span>
+      </div>
+      <h2 class="section-title">
+        2017년부터 이어 온<br>
+        <em>현장의 시간들.</em>
+      </h2>
+    </div>
+
+    <div class="career-list">
+      <div class="career-row active">
+        <div class="career-period">2026.05 — Present</div>
+        <div>
+          <div class="career-org">KTcs · 디지털배움터</div>
+          <div class="career-task">시민을 위한 디지털 역량 강화 교육 운영</div>
+        </div>
+        <div class="career-task">디지털 리터러시 · 키오스크 · 스마트워크</div>
+        <div class="career-role">강사</div>
+      </div>
+
+      <div class="career-row active">
+        <div class="career-period">2026.02 — Present</div>
+        <div>
+          <div class="career-org">한국표준협회 (KSA)</div>
+          <div class="career-task">생성형 AI · 코파일럿 강의 보조</div>
+        </div>
+        <div class="career-task">기업·공공 대상 AI 활용 교육</div>
+        <div class="career-role">강사</div>
+      </div>
+
+      <div class="career-row active">
+        <div class="career-period">2025.08 — Present</div>
+        <div>
+          <div class="career-org">에듀인플랫폼</div>
+          <div class="career-task">늘봄 · 디지털새싹 · 진로 강의 운영</div>
+        </div>
+        <div class="career-task">초·중등 디지털 / 진로 교육</div>
+        <div class="career-role">강사</div>
+      </div>
+
+      <div class="career-row">
+        <div class="career-period">2025.12 — 2026.04</div>
+        <div>
+          <div class="career-org">제주대학교 · 찾아가는학교컨설팅</div>
+          <div class="career-task">AI · 디지털 컨설팅 운영지원</div>
+        </div>
+        <div class="career-task">학교 맞춤형 컨설팅 운영</div>
+        <div class="career-role">운영지원</div>
+      </div>
+
+      <div class="career-row">
+        <div class="career-period">2025.11 — 2025.12</div>
+        <div>
+          <div class="career-org">디지털새싹 K-SW 안전탐험캠프</div>
+          <div class="career-task">SW · AI 교육 캠프 강의<br>(경기대 산학협력단 · 스마트인재개발원)</div>
+        </div>
+        <div class="career-task">블록코딩 · AI 안전 · 메타버스</div>
+        <div class="career-role">강사</div>
+      </div>
+
+      <div class="career-row">
+        <div class="career-period">2024.03 — 2024.12</div>
+        <div>
+          <div class="career-org">제주 노형초등학교</div>
+          <div class="career-task">기초학력 협력강사 · 학습 지원</div>
+        </div>
+        <div class="career-task">개별 맞춤 기초학력 지원</div>
+        <div class="career-role">협력강사</div>
+      </div>
+
+      <div class="career-row">
+        <div class="career-period">2023.03 — 2023.12</div>
+        <div>
+          <div class="career-org">제주 남광초등학교</div>
+          <div class="career-task">기초학력 협력강사</div>
+        </div>
+        <div class="career-task">기초학력 지원 및 학습 코칭</div>
+        <div class="career-role">협력강사</div>
+      </div>
+
+      <div class="career-row">
+        <div class="career-period">2021.09 — 2022.12</div>
+        <div>
+          <div class="career-org">제주 아라초등학교</div>
+          <div class="career-task">기초학력 협력강사</div>
+        </div>
+        <div class="career-task">학습부진 학생 1:1 멘토링</div>
+        <div class="career-role">협력강사</div>
+      </div>
+
+      <div class="career-row">
+        <div class="career-period">2017.08 — 2018.09</div>
+        <div>
+          <div class="career-org">제주 한라초등학교</div>
+          <div class="career-task">방과후 돌봄교실 운영</div>
+        </div>
+        <div class="career-task">방과후 학생 돌봄 · 프로그램 운영</div>
+        <div class="career-role">돌봄교사</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section class="block certs" id="certs" data-screen-label="05 Credentials">
+    <div class="section-head">
+      <div class="section-label">
+        <span class="num">— 04</span>
+        <span class="name">Credentials</span>
+      </div>
+      <h2 class="section-title">
+        12개의 자격 · 4개의 전문 연수,<br>
+        <em>매년 새롭게 갱신</em>합니다.
+      </h2>
+    </div>
+
+    <div class="certs-grid">
+      <div class="cert-card featured">
+        <span class="cert-star">★</span>
+        <div class="cert-year">2026.01</div>
+        <div class="cert-issuer">Google for Education</div>
+        <div class="cert-name">Google 공인 교육 전문가<br>Level 1 &amp; Level 2</div>
+      </div>
+      <div class="cert-card featured">
+        <span class="cert-star">★</span>
+        <div class="cert-year">2026.01</div>
+        <div class="cert-issuer">KT &amp; 한국경제신문</div>
+        <div class="cert-name">AICE FUTURE 1급<br>(AI 활용 능력)</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-year">2025.12</div>
+        <div class="cert-issuer">국제디지털콘텐츠협회</div>
+        <div class="cert-name">캔바 디지털콘텐츠<br>강사 2급</div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-year">2025.11</div>
+        <div class="cert-issuer">KT &amp; 한국경제신문</div>
+        <div class="cert-name">AICE FUTURE 2급 · 3급</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-year">2025.07</div>
+        <div class="cert-issuer">YBM IT</div>
+        <div class="cert-name">COS 스크래치 · 엔트리 1급<br>(블록코딩)</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-year">2025.06</div>
+        <div class="cert-issuer">헬로앱스</div>
+        <div class="cert-name">메타버스(VR 코딩)<br>교육 1급</div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-year">2025.05</div>
+        <div class="cert-issuer">3D프린팅펜창의융합교육협회</div>
+        <div class="cert-name">3D 프린팅펜<br>지도사</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-year">2026.01</div>
+        <div class="cert-issuer">제주특별자치도</div>
+        <div class="cert-name">요양보호사</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-year">2020.08</div>
+        <div class="cert-issuer">보건복지부</div>
+        <div class="cert-name">보육교사 2급</div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-year">2017.09</div>
+        <div class="cert-issuer">한국방과후교육개발원</div>
+        <div class="cert-name">방과후돌봄교실<br>지도사</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-year">2017.08</div>
+        <div class="cert-issuer">보건복지부</div>
+        <div class="cert-name">사회복지사 2급</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-year">2009.08</div>
+        <div class="cert-issuer">한국산업인력공단</div>
+        <div class="cert-name">사무자동화산업기사</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact" data-screen-label="06 Contact">
+    <div class="contact-inner">
+      <h2 class="contact-title">
+        함께 배우고 싶은<br>
+        주제가 있다면 — <em>언제든</em>.
+      </h2>
+      <div class="contact-info">
+        <div class="contact-row">
+          <span class="key">Based in</span>
+          <span class="val">제주특별자치도 제주시</span>
+        </div>
+        <div class="contact-row">
+          <span class="key">Focus</span>
+          <span class="val">생성형 AI · 디지털 · 코딩 · 진로</span>
+        </div>
+        <div class="contact-row">
+          <span class="key">Available</span>
+          <span class="val">기관·학교·기업 · 출강 협의 가능</span>
+        </div>
+        <div class="contact-row">
+          <span class="key">Inquiry</span>
+          <span class="val email">dkfha0715@naver.com</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Kang A-rom · Portfolio</span>
+      <span>Designed in Jeju · Updated 2026.05</span>
+    </div>
+  </section>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  const sideLabel = document.getElementById('sideLabel');
+  const darkSections = ['expertise', 'contact'];
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+    // detect if over dark section
+    let onDark = false;
+    for (const id of darkSections) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const r = el.getBoundingClientRect();
+      if (r.top < 80 && r.bottom > 80) { onDark = true; break; }
+    }
+    sideLabel.classList.toggle('dark', onDark);
+  });
+</script>
+
+<!-- Tweaks defaults block (host parses this to persist Tweak edits) -->
+<script>
+window.__TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#8b6f3f",
+  "bg": "#f1ece1",
+  "ink": "#191613",
+  "headingFont": "Noto Serif KR",
+  "italicFont": "Noto Serif KR"
+}/*EDITMODE-END*/;
+</script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+  const { useEffect } = React;
+
+  const PALETTES = [
+    ['#b88a3e', '#f7f3eb', '#1a1814'], // warm gold (default)
+    ['#8b6f3f', '#f1ece1', '#191613'], // bronze
+    ['#5a6b54', '#f3f1ea', '#1a1c19'], // sage olive
+    ['#2d4a5f', '#eef0ee', '#15191e'], // deep teal-blue
+    ['#a64b3a', '#f6efe6', '#1c1614'], // terracotta
+  ];
+
+  const HEADING_FONTS = ['Noto Serif KR', 'Noto Sans KR'];
+  const ITALIC_FONTS = ['Cormorant Garamond', 'Noto Serif KR'];
+
+  function App() {
+    const [tweaks, setTweak] = window.useTweaks(window.__TWEAK_DEFAULTS);
+
+    useEffect(() => {
+      const root = document.documentElement;
+      root.style.setProperty('--accent', tweaks.accent);
+      // derive accent soft & bg from hex
+      root.style.setProperty('--bg', tweaks.bg);
+      root.style.setProperty('--ink', tweaks.ink);
+      root.style.setProperty('--font-serif', `'${tweaks.headingFont}', serif`);
+      root.style.setProperty('--font-display', `'${tweaks.italicFont}', '${tweaks.headingFont}', serif`);
+    }, [tweaks]);
+
+    return (
+      <window.TweaksPanel title="Tweaks">
+        <window.TweakSection title="Color Palette">
+          <window.TweakColor
+            label="Theme"
+            value={[tweaks.accent, tweaks.bg, tweaks.ink]}
+            options={PALETTES}
+            onChange={(palette) => setTweak({
+              accent: palette[0],
+              bg: palette[1],
+              ink: palette[2],
+            })}
+          />
+        </window.TweakSection>
+        <window.TweakSection title="Typography">
+          <window.TweakRadio
+            label="Heading"
+            value={tweaks.headingFont}
+            options={HEADING_FONTS}
+            onChange={(v) => setTweak('headingFont', v)}
+          />
+          <window.TweakRadio
+            label="Italic"
+            value={tweaks.italicFont}
+            options={ITALIC_FONTS}
+            onChange={(v) => setTweak('italicFont', v)}
+          />
+        </window.TweakSection>
+      </window.TweaksPanel>
+    );
+  }
+
+  const mount = document.createElement('div');
+  document.body.appendChild(mount);
+  ReactDOM.createRoot(mount).render(<App />);
+</script>
+
+</body>
+</html>
